@@ -29,13 +29,11 @@ def synthetic_data(d,k):
                 else:
                     temp.append(random_tip-1)
                     dataset_new1[count][N[i][0]]=random_tip-1
-                #if count:
-                    #print ("i is ",i," temp is ",temp)
+
                 for index,item in enumerate(Pi_set[i+1]):
                     if operator.eq(item,temp):
                         num_pi=index
-                        #if count:
-                            #print ("i is ",i," num pi is ",num_pi)
+
                         break
             else:
                 r = np.random.rand()
@@ -44,11 +42,7 @@ def synthetic_data(d,k):
                 tip=0
                 total_p=0    #对条件分布做归一化处理
                 x, y = np.shape(p_distri[i])
-                #if count:
-                    #print ("the last num pi is ",num_pi,"len p now is ",len(p_distri[i][0]))
-                    #print ("x is ",x," y is ",y)
-                    #if num_pi>=y:
-                        #print ("yes "," num_pi is ",num_pi," y is",y)
+               
                 while tip<x:
                     total_p+=p_distri[i][tip][num_pi]
                     tip+=1
@@ -63,34 +57,24 @@ def synthetic_data(d,k):
                 else:
                     temp.append(random_tip-1)
                     dataset_new1[count][N[i][0]]=random_tip-1
-                #if count:
-                    #print ("i is ",i," temp is ",temp)
                 if i<k:
                     for index,item in enumerate(Pi_set[i+1]):
                         if operator.eq(item,temp):
-                            #if count:
-                                #print ("yes,index is ",index)
+
                             num_pi=index
                             break
                 if i>=k and i<d-1:
                     temp2=[]
-                    '''
-                    print ("N is",N[i+1][1][0])
-                    print (N[i+1][1])
-                    print (lookup_Atr[N[i+1][1][0]])
-                    print ("temp is ",temp)
-                    '''
+                    
                     for j in range(k):
                         temp2.append(temp[lookup_Atr[N[i+1][1][j]]])
                     for index,item in enumerate(Pi_set[i+1]):
                         if operator.eq(temp2,item):
                             num_pi=index
-                            #if count:
-                                #print ("yes,index is ", index,"len pi set is",len(Pi_set[i+1]))
+                            
                             break
         dataset_new.append(temp)
     dataset_new=np.array(dataset_new)
-    #print dataset_new
     dataset_new1=np.array(dataset_new1,dtype=int)
     dataset_new = np.array(dataset_new, dtype=int)
     np.savetxt("dataset_new.txt", dataset_new1, delimiter=",", fmt="%d")

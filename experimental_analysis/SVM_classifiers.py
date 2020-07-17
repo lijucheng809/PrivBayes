@@ -3,7 +3,7 @@ import sklearn
 from sklearn import svm
 import numpy as np
 def readdata():
-    filename="dataset_new4.txt"
+    filename="dataset_new.txt"
     file=open(filename)
     dataset=[]
     for line in file.readlines():

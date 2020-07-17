@@ -33,46 +33,7 @@ def get_pi_set(k, pi_init, pi_set, pi_temp):
             pi_temp[k]=pi_init[k][i]
             get_pi_set(k + 1, pi_init, pi_set, pi_temp)
 
-def get_mute_info(Ax,dataset,pi_set,AP):
-    joint_distributes=np.zeros((len(Ax),len(pi_set)))  #存放联合概率分布集合
-    pi_distributes=np.zeros((1,len(pi_set)))           #存放父节点的边际概率分布集合
-    total_n=np.shape(dataset)[0]    #存放元组的总数
-    total_I=0    #属性结点与父节点的互信息
-    tip=0
-    for index_Ax,item_Ax in enumerate(Ax):
-        for index_pi,item_pi in enumerate(pi_set):
-            n_joint=0
-            n_pi=0
-            n_Ax=0
-            I_temp=0
-            for item in dataset:
-                tip+=1
-                #print ("tip is ",tip," index_Ax is ",index_Ax," index_pi is ",index_pi)
-                pi_dataset=[]    #存放元组中父节点的具体取值
-                for j in AP[1]:
-                   pi_dataset.append(int(item[j]))
-                if tip==1:
-                    pass
-                    #print ("pi_dataset is ",pi_dataset," item_pi is ",item_pi)
-                    #print ("item[AP[0]] is ",item[AP[0]]," item_Ax ",item_Ax)
-                if int(item[AP[0]])==int(item_Ax): n_Ax+=1
-                if operator.eq(pi_dataset,item_pi): n_pi+=1
-                if int(item[AP[0]])==int(item_Ax) and operator.eq(pi_dataset,item_pi): n_joint+=1
-            #print ("n_joint is ",n_joint," n_pi is ",n_pi," n_Ax is ",n_Ax)
-            jointdistr=float(n_joint)/total_n
-            xdistr=float(n_Ax)/total_n
-            pidistr=float(n_pi)/total_n
-            joint_distributes[index_Ax][index_pi]=jointdistr
-            pi_distributes[0][index_pi]=pidistr
-            if xdistr!=0 and pidistr!=0 :
-                I_temp=jointdistr*np.log2(jointdistr/(pidistr*xdistr))
-            if np.isnan(I_temp):
-                I_temp=0
-            total_I+=I_temp
-    print ("total I is ",total_I)
-    return total_I,joint_distributes,pi_distributes
-
-def mutual_information_test(Ax,dataset,pi_set,AP):
+def mutual_information(Ax,dataset,pi_set,AP):
     joint_set=[]
     lookup_Ax={}
     lookup_pi={}
@@ -119,7 +80,6 @@ def mutual_information_test(Ax,dataset,pi_set,AP):
     I_Ax_pi_mat[np.isneginf(I_Ax_pi_mat)]=0
     I_Ax_pi_mat=np.multiply(I_Ax_pi_mat,joint_distributes)
     I_Ax_pi_total=I_Ax_pi_mat.sum()
-    #print ("I_total is ",I_Ax_pi_total)
     return I_Ax_pi_total,joint_distributes,pi_distributes
 
 
@@ -220,8 +180,7 @@ def generate_N(d,theta,epsilon): #d:属性个数
             Ax=[]               #保存当前结点属性取值的集合
             for i in range(int(A_num_set[AP[0]])):
                 Ax.append(i)
-            #mute_info,joint_distributes,pi_distributes=get_mute_info(Ax,dataset,pi_set,AP)
-            mute_info, joint_distributes, pi_distributes = mutual_information_test(Ax, dataset, pi_set, AP)
+            mute_info, joint_distributes, pi_distributes = mutual_information(Ax, dataset, pi_set, AP)
             mute_info_list.append(mute_info)
             joint_distr_list.append(joint_distributes)
             pi_distr_list.append(pi_distributes)
@@ -240,10 +199,6 @@ def generate_N(d,theta,epsilon): #d:属性个数
         N.append(I_max_pair_copy)
         V.append(I_max_pair_copy[0])
         A_set.remove(I_max_pair_copy[0])
-        #print N[i][0]
-        print N
-    print ("len is",len(Ax_Pi_distrs)," ",len(Pi_distrs)," ",len(Pi_set))
-
     return dataset,Ax_Pi_distrs,Pi_distrs,Pi_set,N,A_num_set
 
 if __name__ == '__main__':

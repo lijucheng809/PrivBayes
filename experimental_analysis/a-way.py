@@ -126,13 +126,5 @@ def main(a,d):
         joint_distri_set_old[i]=np.fabs(joint_distri_set_old[i]-joint_distri_set_new[i])
         aver_var_dist+=np.max(joint_distri_set_old[i])
     aver_var_dist/=n
-
-    for i in range(n):
-        #joint_distri_set_old[i],joint_distri_set_new[i]=np.array(joint_distri_set_old[i]),np.array(joint_distri_set_new[i])
-        aver_distance+=1/np.sqrt(2)*np.linalg.norm(np.sqrt(joint_distri_set_new[i])-np.sqrt(joint_distri_set_old[i]))
-        #aver_distance+=np.sqrt(np.sum(np.power(np.sqrt(joint_distri_set_old[i])-np.sqrt(joint_distri_set_new[i]),2)))/(2**0.5)
-    aver_distance/=n
-
     print aver_var_dist
-    print aver_distance
 main(2,14)
