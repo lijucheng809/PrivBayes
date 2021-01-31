@@ -11,4 +11,6 @@
 4.利用贝叶斯网络祖先采样的方法，从步骤3中生成的具有的噪声的概率分布中进行采样，从而生成与原数据集具有同样的元组个数和属性个数的合成数据集；
 
 5.采用α-边际分布和SVM分类器来验证原始数据集和合成的数据集的相似程度，从而验证合成数据集的隐私性和效用性。
-#Reference
+
+# Reference
+[1] Zhang J , Cormode G , Procopiuc C M , et al. PrivBayes: private data release via bayesian networks[M]. 2014.
